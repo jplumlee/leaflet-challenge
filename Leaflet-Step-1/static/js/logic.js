@@ -9,21 +9,30 @@ d3.json(queryUrl).then(data => {
 });
 
 // Function that will determine the color of an earthquake based on the magnitude
-function chooseColor(depth) {
-    if (depth <= 10) {
-      return "#B7F34D";
-    } else if (depth <= 30) {
-      return "#E1F34D";
-    } else if (depth <= 50) {
-      return "#F3DB4D";
-    } else if (depth <= 70) {
-      return "#F3BA4D";
-    } else if (depth <= 90) {
-      return "#F0A86C";
-    } else {
-      return "#F06C6C";
-    };
-  }
+// function chooseColor(depth) {
+//     if (depth <= 10) {
+//       return "#B7F34D";
+//     } else if (depth <= 30) {
+//       return "#E1F34D";
+//     } else if (depth <= 50) {
+//       return "#F3DB4D";
+//     } else if (depth <= 70) {
+//       return "#F3BA4D";
+//     } else if (depth <= 90) {
+//       return "#F0A86C";
+//     } else {
+//       return "#F06C6C";
+//     };
+//   }
+
+  function chooseColor(d) {
+    return d > 91  ? '#F06C6C' :
+           d > 71  ? '#F0A86C' :
+           d > 51  ? '#F3BA4D' :
+           d > 31  ? '#F3DB4D' :
+           d > 11  ? '#E1F34D' :
+                     '#B7F34D';
+}
 
 function createFeatures(earthquakeData) {
 
@@ -112,14 +121,13 @@ function createMap(earthquakes) {
   legend.onAdd = function () {
   
     var div = L.DomUtil.create('div', 'info legend'),
-        depths = [10, 30, 50, 70, 90, 91],
-        labels = [];
+        depths = [0, 10, 30, 50, 70, 90];
 
     // loop through our density intervals and generate a label with a colored square for each interval
     for (var i = 0; i < depths.length; i++) {
         div.innerHTML +=
             '<i style="background:' + chooseColor(depths[i] + 1) + '"></i> ' +
-            depths[i] + (depths[i + 1] ? + '&ndash;' + depths[i + 1] + '<br>' : '+');
+            depths[i] + (depths[i + 1] ? '&ndash;' + depths[i + 1] + '<br>' : '+');
     }
 
     return div;
