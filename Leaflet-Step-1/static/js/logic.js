@@ -30,7 +30,7 @@ function createFeatures(earthquakeData) {
   // Define a function we want to run once for each feature in the features array
   // Give each feature a popup describing the place and time of the earthquake
   function onEachFeature(feature, layer) {
-    layer.bindPopup("</p><p> Magnitude: " + feature.properties.mag + 
+    layer.bindPopup("<p> Magnitude: " + feature.properties.mag + 
       "</p><p>Depth: " + feature.geometry.coordinates[2] + 
       "</p><p> Location: " + feature.properties.title + "</p>");
   }
@@ -38,10 +38,6 @@ function createFeatures(earthquakeData) {
   // Create a GeoJSON layer containing the features array on the earthquakeData object
   // Run the onEachFeature function once for each piece of data in the array
   var earthquakes = L.geoJSON(earthquakeData, {
-    onEachFeature: onEachFeature,
-  });
-
-  var mags = L.geoJSON(earthquakeData, {
     onEachFeature: onEachFeature,
     pointToLayer: (feature, latlng) => {
       return new L.Circle(latlng, {
@@ -54,10 +50,10 @@ function createFeatures(earthquakeData) {
   });
 
   // Sending our earthquakes layer to the createMap function
-  createMap(earthquakes, mags);
+  createMap(earthquakes);
 }
 
-function createMap(earthquakes, mags) {
+function createMap(earthquakes) {
 
   // Define satellitemap, darkmap, and outdoorsmap layers
   var satellitemap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
@@ -92,8 +88,7 @@ function createMap(earthquakes, mags) {
 
   // Create overlay object to hold our overlay layer
   var overlayMaps = {
-    Earthquakes: earthquakes,
-    // Magnitudes: mags
+    Earthquakes: earthquakes
   };
 
   // Create our map, giving it the streetmap and earthquakes layers to display on load
@@ -105,30 +100,30 @@ function createMap(earthquakes, mags) {
     layers: [satellitemap, earthquakes]
   });
 
+    // Create a layer control
+  // Pass in our baseMaps and overlayMaps
+  // Add the layer control to the map
+  L.control.layers(baseMaps, overlayMaps, {
+    collapsed: false
+  }).addTo(myMap);
+
   var legend = L.control({position: 'bottomright'});
 
-  legend.onAdd = function (myMap) {
+  legend.onAdd = function () {
   
     var div = L.DomUtil.create('div', 'info legend'),
-        depths = [9-10, 11-30, 31-50, 51-70, 71-90, 91],
+        depths = [10, 30, 50, 70, 90, 91],
         labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
     for (var i = 0; i < depths.length; i++) {
         div.innerHTML +=
             '<i style="background:' + chooseColor(depths[i] + 1) + '"></i> ' +
-            depths[i] + (depths[i + 1] ? + depths[i + 1] + '<br>' : '+');
+            depths[i] + (depths[i + 1] ? + '&ndash;' + depths[i + 1] + '<br>' : '+');
     }
 
     return div;
   };
   
   legend.addTo(myMap);
-
-  // Create a layer control
-  // Pass in our baseMaps and overlayMaps
-  // Add the layer control to the map
-  L.control.layers(baseMaps, overlayMaps, {
-    collapsed: false
-  }).addTo(myMap);
 }
