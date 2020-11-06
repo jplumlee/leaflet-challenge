@@ -9,22 +9,6 @@ d3.json(queryUrl).then(data => {
 });
 
 // Function that will determine the color of an earthquake based on the magnitude
-// function chooseColor(depth) {
-//     if (depth <= 10) {
-//       return "#B7F34D";
-//     } else if (depth <= 30) {
-//       return "#E1F34D";
-//     } else if (depth <= 50) {
-//       return "#F3DB4D";
-//     } else if (depth <= 70) {
-//       return "#F3BA4D";
-//     } else if (depth <= 90) {
-//       return "#F0A86C";
-//     } else {
-//       return "#F06C6C";
-//     };
-//   }
-
   function chooseColor(d) {
     return d > 91  ? '#F06C6C' :
            d > 71  ? '#F0A86C' :
