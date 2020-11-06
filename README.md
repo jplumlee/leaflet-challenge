@@ -1,6 +1,6 @@
 # Leaflet Homework - Visualizing Data with Leaflet
 
-Edit the configEDIT.js file in leaflet-challenge/Leaflet-Step-1/static/js/ to include your Mapbox API key.
+Edit the configEDIT.js file in leaflet-challenge/Leaflet-Step-1/static/js/ to include your Mapbox API key. Change the configEDIT.js filename to config.js and run the index.html file. I ran the index.html file withe Live Server extension for Visual Studio Code to see the project.
 
 ## Background
 
